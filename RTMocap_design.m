@@ -71,25 +71,25 @@ end
 
 else
 %% else, ask questions and write a file
-pause_nb=0;
+nb_pauses=0;
 sp_threshold=1000;
 
 % Pause? 
-pause=input('1:No Pause, 2:With Pause(s) ');
-if isempty(pause);pause=1;end
+pause=input('0:No Pause, 1:With Pause(s) ');
+if isempty(pause);pause=0;end
 
-if pause == 2
+if pause == 1
     nb_pauses=input('Enter the number of Pause: ');
-    if isempty(pause_nb);pause_nb=0;end
+    if isempty(nb_pauses);nb_pauses=0;end
 end
 
 % Reward Type?
-reward=input('1:Artificial Reward, 2:Engaging Reward ');
+reward=input('0:No Reward, 1:Artificial Reward, 2:Engaging Reward ');
 
 if reward==2
-    adjust=input('Dynamic Speed Threshold ? 1:No Adjusting, 2:With Adjusting ');
+    adjust=input('Dynamic Speed Threshold ? 0:No Adjusting, 1:With Adjusting ');
         
-    if adjust == 2
+    if adjust == 1
         sp_threshold=input('Enter the initial speed threshold (mm.s-1): ');
         if isempty(sp_threshold);sp_threshold=1000;end
     end
@@ -98,9 +98,9 @@ end
 % Total number of markers
 nb_markers=input('Enter the total number of markers in marker list: ');    
     
-marker_table=zeros(size(pause_nb+1,3));
-if pause == 2
-    for i=2:pause_nb+1
+marker_table=zeros(size(nb_pauses+1,3));
+if pause == 1
+    for i=2:nb_pauses+1
         marker_table(i,1)=input(['Enter the marker position in list associated with the pause n°',num2str(i-1),' ']);
         marker_table(i,2)=input(['Radius of position error (mm) associated with pause n°',num2str(i-1),' ']);
         marker_table(i,3)=input(['Enter the duration of the pause n°',num2str(i-1),' ']);

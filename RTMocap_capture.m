@@ -44,7 +44,9 @@ data=zeros(N,3,M);
 time=zeros(N,1);
 
 % Qualisys config file
-q=QMC('QMC_conf.txt');
+if ~exist('q','var')
+    q=QMC('QMC_conf.txt');
+end
 
 % capture
 for i = 1:N

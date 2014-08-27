@@ -36,10 +36,11 @@
 
 function [ref] = RTMocap_trajref(name,duration,num,Fs)
 
-[high,~,coin,spit,~] = RTMocap_audioinit();
-
 % Qualisys config file
-q=QMC('QMC_conf.txt');
+if ~exist('q','var')
+    q=QMC('QMC_conf.txt');
+end
+
 close all;
 
 [ref_start] = RTMocap_pointref(name,'INITIAL',num,Fs);
@@ -74,7 +75,7 @@ end
 
 % Check if marker start is correct
 if any(RTMoCap_3Ddist(m(1:Fs/10,:),ref_start))>10
-    play(spit);
+    RTMocap_reward(1,-1);
     answer=input('START POSITION BAD, Would you like to calibrate this TRAJECTORY again ? y/n ','s'); 
     if answer == 'y'
         % restart loop
@@ -83,7 +84,7 @@ if any(RTMoCap_3Ddist(m(1:Fs/10,:),ref_start))>10
 end
 
 if any(RTMoCap_3Ddist(m(end-Fs/10:end,:),ref_stop))>10
-    play(spit);
+    RTMocap_reward(1,-1);
     answer=input('STOP POSITION BAD, Would you like to calibrate this TRAJECTORY again ? y/n ','s'); 
     if answer == 'y'
         % restart loop
@@ -97,7 +98,7 @@ plot3(m(:,1),m(:,2),m(:,3));
 axis square;
 
 % else compute reference position
-playblocking(coin);
+RTMocap_reward(1,+1);
 ref=m;  
 
 end

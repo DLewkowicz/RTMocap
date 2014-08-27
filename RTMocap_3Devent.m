@@ -33,7 +33,7 @@
 % History:
 % Version 1.0 - Daniel Lewkowicz - 08-2014
 
-function time_event = RTMoCap_3Devent(A,threshold,F)
+function time_event = RTMocap_3Devent(A,threshold,F)
 
     % Nothing fancy here, just a simple find function
     time_event=find(RTMoCap_3Dvel(A,F)>threshold,1,'first')*1000/F;

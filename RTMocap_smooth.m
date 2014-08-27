@@ -36,6 +36,9 @@
 
 function data_sm = RTMocap_smooth(data,Fs,F0,order)
 
+% Add library folder to current path (Octave GPL code: butter, filtfilt, ...)
+addpath([cd '\lib']);
+
 if nargin==1 
     Fs=input('Please input the sampling frequency (Hz): ');
     
@@ -55,6 +58,9 @@ for j=1:size(data,3)
     [B,A] = butter(order/2, F0 * 2/Fs );
     data_sm(:,:,j) = filtfilt(B,A,data(:,:,j));
 end    
+
+% clean current path
+rmpath([cd '\lib']);
 
 end
 

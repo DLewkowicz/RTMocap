@@ -33,7 +33,7 @@
 % History:
 % Version 1.0 - Daniel Lewkowicz - 08-2014
 
-function data_i = RTMoCap_interp(data,time,Fs)
+function data_i = RTMocap_interp(data,time,Fs)
 
 % Disable warnings for NaN values
 warning('off','MATLAB:chckxy:IgnoreNaN');
@@ -54,7 +54,6 @@ for j=1:size(data,3)
             data_i(:,:,j)=interp1(num_frame,data(:,:,j),(1:nb_samples)','spline');
         end
 end 
-
 
 % Enable warnings for NaN values before leaving
 warning('on','MATLAB:chckxy:IgnoreNaN');

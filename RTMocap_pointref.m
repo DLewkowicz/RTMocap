@@ -35,11 +35,14 @@
 function [ref] = RTMocap_pointref(name,name_pos,num,Fs)
 
 % Qualisys config file
-q=QMC('QMC_conf.txt');
-close all;
+if ~exist('q','var')
+    q=QMC('QMC_conf.txt');
+end
 
 % Infinite loop until reference position has been calibrated
 while exist('ref','var')==0
+    
+close all
 
     disp(['Place the [',name,'] marker on [',name_pos,'] position and Press a key']);
     pause;
@@ -62,13 +65,13 @@ if any(isnan(m))
 end
 
 % Check if marker has moved
-test=RTMoCap_3Dvel(m,Fs);
+test=RTMocap_3Dvel(m,Fs);
 plot(test);
 figure;
 plot3(m(:,1),m(:,2),m(:,3));
 axis square;
 
-if any(RTMoCap_3Dvel(m,Fs)>20)    
+if any(RTMocap_3Dvel(m,Fs)>20)    
     answer=input('Movement detected, Would you like to calibrate this postition again ? y/n ','s'); 
     if answer == 'y'
         % restart loop
@@ -80,5 +83,7 @@ end
 ref=mean(m);  
 
 end
+
+close all
 
 end

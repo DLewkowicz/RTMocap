@@ -35,7 +35,7 @@
 % History:
 % version 1.0 - Daniel Lewkowicz - 08-2014
 
-function V = RTMoCap_3Dvel(A,F)
+function V = RTMocap_3Dvel(A,F)
     % First order derivative of euclidean distance in 3D Space
     V=sqrt(sum(diff(A).^2,2))*F;
 end

@@ -35,7 +35,7 @@
 % Version 1.0 - Daniel Lewkowicz - 08-2014
 
 
-function C = RTMoCap_3Ddist(A,B)
+function C = RTMocap_3Ddist(A,B)
 
 if size(A,1)~=size(B,1)
 % When comparing a trajectory versus a point
