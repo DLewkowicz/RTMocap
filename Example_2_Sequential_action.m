@@ -1,6 +1,6 @@
-%% Example 1 - Reach-to-Grasp Movements 
-% This example will show you how to write a simple script using RTMoCap
-% functions using MATLAB(R)
+%% Example 2 - Sequential actions 
+% This example will show you how to use RTMoCap for imposing spatiotemporal
+% constraints
 % 
 % Copyright (C) 2014 Daniel Lewkowicz <daniel.lewkowicz@gmail.com>
 % RTMocap Toolbox available at : http://sites.google.com/RTMocap
@@ -36,8 +36,14 @@ global qualisys
 qualisys=QMC('QMC_conf.txt');
 
 %% STEP 2 : Configuration of Reference Position 
-start_ref = RTMocap_pointref('Index','INITIAL',marker_table(1,1),Fs,qualisys);
-stop_ref = RTMocap_pointref('Index','TERMINAL',marker_table(1,1),Fs,qualisys);
+start_ref = RTMocap_pointref('Object','INITIAL',marker_table(1,1),Fs,qualisys);
+stop_ref = RTMocap_pointref('Object','TERMINAL',marker_table(1,1),Fs,qualisys);
+
+pause_table=zeros(size(marker_table,1)-1,3);
+% Reference pause positions
+for p=1:size(marker_table,1)-1
+    pause_table(p,:) = RTMocap_pauseref('Thumb',p,marker_table(p+1,1),Fs,qualisys);
+end
 
 % Initializing Variables % 
 
@@ -80,8 +86,8 @@ pause(delay_tab(n_rec));
 play(audio(1,1).internalObj);
 disp('-------- GO --------');
 
-% capture
-[data,time] = RTMocap_capture(duration,Fs,nb_markers,n_rec,qualisys);
+% capture - WITH PAUSES
+[data,time] = RTMocap_capturep(duration,Fs,nb_markers,n_rec,qualisys,marker_table,pause_table);
 
 %% STEP 4 : Writing data files and data processing
 
@@ -117,7 +123,7 @@ if  start_error > marker_table(1,2)
 	RTMocap_display(data_sm,Fs);
     disp(['Distance from start: ',num2str(start_error),' mm']);
     disp('INITIAL POSITION BAD - REJECTED TRIAL');
-    continue
+    continue;
 end    
     
 % stop position
@@ -140,8 +146,6 @@ err_tab(n_rec,:)=[stop_pos stop_ref];
 
 n_rec=n_rec+1;
 % everything is fine, go back for next trial
-
-
 
 end
 

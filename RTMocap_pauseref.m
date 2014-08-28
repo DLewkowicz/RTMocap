@@ -2,11 +2,13 @@
 % 
 % This function will help you to set a point as a reference pause position.
 % 
-%   Usage : [ref] = RTMocap_pauseref(name,n_pause,num,Fs)
+%   Usage : [ref] = RTMocap_pauseref(name,npause,M,F,cam)
 % 
-%   NAME: The name of the marker
-%   N_PAUSE: Ordinal number of the pause during the movement sequence
-%   NUM : The marker ordinal number in marker list
+%   NAME, The name of the marker
+%   NPAUSE, Ordinal number of the pause during the movement sequence
+%   M, The marker ordinal number in marker list
+%   F, Capture Frequency
+%   CAM: Matlab link for camera system (ex: qualisys)
 % 
 %   Returns 
 %   REF: Reference pause position as a 1x3 array, [X Y Z]
@@ -29,28 +31,22 @@
 % You should have received a copy of the GNU General Public License along
 % with this program; if not, see <http://www.gnu.org/licenses/>.
 
-function [ref] = RTMocap_pauseref(name,npause,num,Fs)
-
-% Qualisys config file
-q=QMC('QMC_conf.txt');
-close all;
+function [ref] = RTMocap_pauseref(name,npause,M,F,cam)
 
 % Infinite loop until reference position has been calibrated
 while exist('ref','var')==0
 
+close all;
+
+    % Please verify that this Marker is correctly identified by the Camera system
     disp(['Place the [',name,'] marker on PAUSE position n°', num2str(npause),' and Press a key']);
     pause;
     
 % Calibration duration : half a second
-    m=zeros(Fs/2,3);
-    for i=1:Fs/2
-        disp('Calibration...');
-        [labels,~]=QMC(q);
-        m(i,:)=labels(:,num)';
-    end
+[data,~]=RTMocap_capture(0.5,F,M,1,cam);
     
 % Check if marker was occluded    
-if any(isnan(m))
+if any(isnan(data))
     answer=input('NaNs in data, Would you like to calibrate this postition again ? y/n ','s');
     if answer == 'y'
         % restart loop
@@ -59,13 +55,13 @@ if any(isnan(m))
 end
 
 % Check if marker has moved
-test2=RTMoCap_3Dvel(m,Fs);
-plot(test2);
+vel=RTMocap_3Dvel(data(:,:,M),F);
+plot(vel);
 figure;
-plot3(m(:,1),m(:,2),m(:,3));
+plot3(data(:,1,M),data(:,2,M),data(:,3,M));
 axis square;
 
-if any(RTMoCap_3Dvel(m,Fs)>20)    
+if any(RTMocap_3Dvel(data(:,:,M),F)>20)    
     answer=input('Movement detected, Would you like to calibrate this postition again ? y/n ','s'); 
     if answer == 'y'
         % restart loop
@@ -74,8 +70,10 @@ if any(RTMoCap_3Dvel(m,Fs)>20)
 end 
 
 % else compute reference position
-ref=mean(m);  
+ref=mean(data(:,:,M));   
 
 end
+
+close all
 
 end

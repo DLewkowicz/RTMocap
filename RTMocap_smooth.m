@@ -3,11 +3,11 @@
 %  This function will help you to smooth your data with an appropriate
 %  filter suited for human motion capture. (See Winter, 1990)
 % 
-%   Usage : data_smooth = RTMocap_smooth(table,Fs,F0,order)
+%   Usage : data_smooth = RTMocap_smooth(table,Fs,Fc,order)
 % 
 %   TABLE, a N-by-3 recorded data table (1 marker)
 %   FS, Sampling Frequency
-%   F0, Cut-off frequency
+%   FC, Cut-off frequency
 %   ORDER, The order of the filter 
 % 
 %   Returns 
@@ -34,7 +34,7 @@
 % History:
 % Version 1.0 - Daniel Lewkowicz - 08-2014
 
-function data_sm = RTMocap_smooth(data,Fs,F0,order)
+function data_sm = RTMocap_smooth(data,Fs,FC,order)
 
 % Add library folder to current path (Octave GPL code: butter, filtfilt, ...)
 addpath([cd '\lib']);
@@ -43,8 +43,8 @@ if nargin==1
     Fs=input('Please input the sampling frequency (Hz): ');
     
 elseif nargin == 2   
-    F0=input('Please input the lowpass cut-off frequency (Hz): ');
-    if isempty(F0);F0=10;end
+    FC=input('Please input the lowpass cut-off frequency (Hz): ');
+    if isempty(FC);FC=10;end
 
 elseif nargin == 3 
     order=input('Please input the order : ');
@@ -55,7 +55,7 @@ data_sm=zeros(size(data));
 
 for j=1:size(data,3)
     % filtfilt doubles the order (forward and backward pass)
-    [B,A] = butter(order/2, F0 * 2/Fs );
+    [B,A] = butter(order/2, FC * 2/Fs );
     data_sm(:,:,j) = filtfilt(B,A,data(:,:,j));
 end    
 
