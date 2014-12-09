@@ -1,20 +1,20 @@
-%% RTMoCap_3Dvel
-% This function will help you to compute instantaneous tangential velocity 
+%% RTMoCap_3Dacc
+% This function will help you to compute instantaneous acceleration 
 % 
-% Usage : V = RTMoCap_3Dvel(A,Fs)
+% Usage : ACC = RTMoCap_3Dacc(DATA,Fs)
 % 
-%       A is a N-by-3 array of recorded data.
+%       DATA is an array of recorded data.
 %       Fs is the sampling frequency
-%       V is a N-by-1 vector.
+%       ACC is a N-by-1 vector.
 % 
 %       Principle: Assuming that each measurement is seaparated by the 
 %       exact same amount of time (i.e. interpolated data), 
-%       the instantaneous velocity is simply given by: 
-%           V = dS / dT 
-%       S being the length of the path travelled until time T
+%       the instantaneous acceleration is simply given by: 
+% 
+%           a = sqrt((d(dx/dT)/dT)^2 + (d(dy/dT)/dT)^2 + (d(dz/dT)/dT)^2)
 % 
 %   Example
-%	V = RTMoCap_3Dvel(data(:,:,1),200)
+%	ACC = RTMoCap_3Dvel(data(:,:,1),200)
 % 
 % Copyright (C) 2014 Daniel Lewkowicz <daniel.lewkowicz@gmail.com>
 % RTMocap Toolbox available at : http://sites.google.com/RTMocap/
@@ -35,7 +35,7 @@
 % History:
 % version 1.0 - Daniel Lewkowicz - 08-2014
 
-function V = RTMocap_3Dvel(A,Fs)
+function acc = RTMocap_3Dacc(A,Fs)
 
 if nargin<2 
     Fs=input('Please input sampling frenquency (Hz): ');
@@ -44,6 +44,14 @@ if nargin<2
     end    
 end
 
-    % First order derivative of euclidean distance in 3D Space
-    V=sqrt(sum(diff(A).^2,2))*Fs;
+    %First calculate dx, dy and dz
+for i=1:size(A,3)    
+    dx(:,i)=diff(A(:,1,i))*Fs;
+    dy(:,i)=diff(A(:,2,i))*Fs;
+    dz(:,i)=diff(A(:,3,i))*Fs;
+    dA(:,:,i)=[dx(:,i),dy(:,i),dz(:,i)];
+end
+    %then compute euclidean distance of two sucessive dx,dy and dz
+    acc=sqrt(sum(diff(dA).^2,2))*Fs;
+    
 end

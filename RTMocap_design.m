@@ -59,8 +59,8 @@ sp_threshold=config(6);
 nb_pauses=config(7);
 reward=config(8);
 
+% fancy stuff for parsing marker_table variables
 marker_table=zeros(size(nb_pauses+1,3));
-   
 offset=size(config,1)-(nb_pauses+1)*3;
 for i=1:nb_pauses+1
     marker_table(i,1)=config(offset+(i-1)*3+1);
@@ -101,14 +101,14 @@ nb_markers=input('Enter the total number of markers in marker list: ');
 marker_table=zeros(size(nb_pauses+1,3));
 if pause == 1
     for i=2:nb_pauses+1
-        marker_table(i,1)=input(['Enter the marker position in list associated with the pause n°',num2str(i-1),' ']);
-        marker_table(i,2)=input(['Radius of position error (mm) associated with pause n°',num2str(i-1),' ']);
-        marker_table(i,3)=input(['Enter the duration of the pause n°',num2str(i-1),' ']);
+        marker_table(i,1)=input(['Enter the marker number for pause n°',num2str(i-1),': ']);
+        marker_table(i,2)=input(['Radius of position error (mm) for pause n°',num2str(i-1),': ']);
+        marker_table(i,3)=input(['Enter the duration (secs) of the pause n°',num2str(i-1),': ']);
     end
 end    
 
 % The index number of the marker to be 'checked'        
-marker_table(1,1)=input('Enter the marker position in list associated with the End of the trial: ');
+marker_table(1,1)=input('Enter the marker number for final target position: ');
     
 % The accuracy threshold in millimeters
 marker_table(1,2)=input('Enter the radius of position error (mm) associated with End of the trial: ');

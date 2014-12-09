@@ -4,9 +4,10 @@
 %  frames due to occlusions or computational delays. The main prupose of
 %  this function is to remove NaNs and reconstruct timings of samples.
 % 
-%   Usage: data_i = RTMoCap_interp(data,time,Fs)
+%   Usage: data_i = RTMoCap_interp(data,Fs,time)
 % 
 %   DATA, a data matrix
+%   FS, the sampling frequency
 %   TIME, a recorded time vector
 % 
 %   Returns 
@@ -33,11 +34,22 @@
 % History:
 % Version 1.0 - Daniel Lewkowicz - 08-2014
 
-function data_i = RTMocap_interp(data,time,Fs)
+function data_i = RTMocap_interp(data,Fs,time)
 
 % Disable warnings for NaN values
 warning('off','MATLAB:chckxy:IgnoreNaN');
 warning('off','MATLAB:interp1:NaNinY');
+
+if nargin<2 
+    Fs=input('Please input the sampling frequency (Hz): ');
+    if Fs<0
+        error('Sampling Frequency must be positive');
+    end
+end
+
+if nargin<3
+    time=(1:1/Fs*1000:1/Fs*1000*size(data,1))';
+end
 
 nb_samples=size(data,1);
 
@@ -46,7 +58,6 @@ num_frame=((time(:,1)-time(1,1))/1000*Fs)+1;
 
 % Missing data ? interpolation
 data_i=zeros(size(data));
-
 for j=1:size(data,3)      
         %if data is not all NaNs 
         if sum(isnan(data(:,:,j))) ~= nb_samples
