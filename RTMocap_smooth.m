@@ -35,12 +35,18 @@
 % History:
 % Version 1.0 - Daniel Lewkowicz - 08-2014
 % Version 1.1 - D.L. - Added a residual plot to select FC - 11-2014
+% Version 1.2 - Laurent Ott - modification of the library path handling
+%                           - reduce the FC upper search bound to Fs/2-1
 
 function data_sm = RTMocap_smooth(data,Fs,FC)
 
 % Add library folder to current path
-% addpath([cd '\lib']);
-
+whereiam = fileparts( which( mfilename ) );
+libpath = fullfile( whereiam , 'lib' );
+addpath( libpath , '-end' ); %use this one if you want to use the Signal 
+                             %Processing Toolbox functions in priority if available 
+%addpath( libpath , '-begin' ); %use this one if you want to use the provided 
+                                %functions of the RTMocap toolbox
 if nargin < 2 
     Fs=input('Please input the sampling frequency (Hz): ');
 end
@@ -48,23 +54,24 @@ end
 if nargin < 3
     %help you find the better cut-off frequency
     vel=RTMocap_3Dvel(data,Fs);
-    for i=1:Fs/2
+    
+    for i=1:Fs/2-1
         vel_sm_all(:,i,:)=RTMocap_smooth(vel,Fs,i);
         res=vel_sm_all(:,i,:)-vel;
         res_vel(i,:)=sum(res.^2)/size(vel_sm_all,1);
         for j=1:size(res_vel,2)
             [auto_corr,lags]=xcorr(res(:,:,j),'coeff');
             A(i,j)=sum(auto_corr(lags>0).^2);
-        end    
+        end
     end
-     
-% Initializing color map
+    
+    % Initializing color map
     mcol=1:floor(64/size(data,3)):64;
     
     figure('Color',[1 1 1]);
     col=jet;
     hold on
-    
+        
     % Initialize plot for legend
     for j=1:size(res_vel,2)
         plot(res_vel(1,j),'DisplayName',['Marker:',num2str(j)],'Color',col(mcol(j),:));
@@ -74,7 +81,7 @@ if nargin < 3
         
     % plot all residuals
     for j=1:size(res_vel,2)
-        plot(1:Fs/2,res_vel(:,j),'color',col(mcol(j),:));
+        plot(1:Fs/2-1,res_vel(:,j),'color',col(mcol(j),:));
         [~,xFc(j)]=min(A(:,j));
         plot(xFc(j),res_vel(xFc(j),j),'*','color',col(mcol(j),:));
     end    
@@ -86,7 +93,7 @@ if nargin < 3
     ylim([-100 Fs*10]);
     xlim([0 Fs/2]);
   
-    FC=input(['Please input the lowpass cut-off frequency (Recommended: ',num2str(mean(xFc),2),'Hz): ']);
+    FC=input(['Please input the lowpass cut-off frequency (Recommended: ',num2str(mean(xFc),2),'Hz, default: 10Hz): ']);
     if isempty(FC);FC=10;end
     
     close;
