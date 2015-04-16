@@ -48,11 +48,11 @@ vel=RTMocap_3Dvel(data,Fs);
 % Get acceleration vector
 % acc=RTMocap_3Dacc(data,Fs);
 
-% Get height vector
+% Get height vector (z-axis)
 height=data(:,3,:);
 
 % Peak detection
-[maxtab, mintab]=RTMocap_peakdet(vel,200);
+[maxtab, mintab]=RTMocap_peakdet(vel,100);
 
 % Movement segmentation for each bell shape curve
 for i=1:size(maxtab,1)
@@ -140,6 +140,13 @@ for i=1:size(maxtab,1)
     kinematic_table.TPH(:,i)=TPH(i,1)*Timems;
 end
     if ~exist('kinematic_table','var')
-        kinematic_table(1:8)=NaN;
+        kinematic_table.start=NaN;
+        kinematic_table.stop=NaN;
+        kinematic_table.APV=NaN;
+        kinematic_table.TPV=NaN;
+        kinematic_table.MT=NaN;
+        kinematic_table.DC=NaN;
+        kinematic_table.APH=NaN;
+        kinematic_table.TPH=NaN;
     end
 end

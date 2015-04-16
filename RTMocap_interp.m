@@ -39,6 +39,8 @@ function data_i = RTMocap_interp(data,Fs,time)
 % Disable warnings for NaN values
 warning('off','MATLAB:chckxy:IgnoreNaN');
 warning('off','MATLAB:interp1:NaNinY');
+warning('off','MATLAB:interp1:NaNstrip');
+
 
 if nargin<2 
     Fs=input('Please input the sampling frequency (Hz): ');
@@ -49,7 +51,10 @@ end
 
 if nargin<3
     time=(1:1/Fs*1000:1/Fs*1000*size(data,1))';
+else
+    time=time+1;
 end
+
 
 nb_samples=size(data,1);
 
@@ -69,5 +74,6 @@ end
 % Enable warnings for NaN values before leaving
 warning('on','MATLAB:chckxy:IgnoreNaN');
 warning('on','MATLAB:interp1:NaNinY');
- 
+warning('on','MATLAB:interp1:NaNstrip'); 
+
 end

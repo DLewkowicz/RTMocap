@@ -96,7 +96,7 @@ elseif nargin==2
     maxlag=[]; scale=[];
     if ischar(Y), scale=Y; Y=[];
     elseif isscalar(Y), maxlag=Y; Y=[];
-end
+    end
 elseif nargin==3
     scale=[];
     if ischar(maxlag), scale=maxlag; maxlag=[]; end
@@ -142,7 +142,7 @@ end
 if isvector(X) && isvector(Y) && length(X) ~= length(Y) && ~strcmp(scale,'none')
 error('xcorr: scale must be "none" if length(X) ~= length(Y)')
 end
-P = columns(X);
+P = size(X,2);
 M = 2^nextpow2(N + maxlag);
 if ~isvector(X)
     %% For matrix X, correlate each column "i" with all other "j" columns
@@ -220,9 +220,10 @@ end
 %% return the lag indices if desired
 if nargout == 2
 maxlag = maxlag+pad_result;
-lags = [-maxlag:maxlag];
+lags = (-maxlag:maxlag);
 end
-endfunction
+
+end
 %%------------ Use brute force to compute the correlation -------
 %%if !isvector(X)
 %% %% For matrix X, compute cross-correlation of all columns

@@ -39,7 +39,7 @@
 function data_sm = RTMocap_smooth(data,Fs,FC)
 
 % Add library folder to current path
-addpath([cd '\lib']);
+% addpath([cd '\lib']);
 
 if nargin < 2 
     Fs=input('Please input the sampling frequency (Hz): ');
@@ -105,8 +105,6 @@ for j=1:size(data,3)
     data_sm(:,:,j) = filtfilt(B,A,data(:,:,j));
 end    
 
-% clean the current path before leaving
-rmpath([cd '\lib']);
 
 end
 

@@ -66,7 +66,7 @@ end
     end
     
     title('Velocity profiles');
-    xlabel('Time (ms)'), ylabel('Speed (mm/sec)');
+    xlabel('Time (ms)'), ylabel('Tangential Velocity (mm.s^{-1})');
     % Legend is displayed in the 3Dplot
     % legend(gca,'show');
     
@@ -85,12 +85,12 @@ for i=1:nb_elmt
            
     % display peaks of velocity
     plot(ktab.TPV(i)+ktab.start(i),ktab.APV(i),'r*');
-    text(ktab.TPV(i)+ktab.start(i)+50,ktab.APV(i),['APV: ',num2str(ktab.APV(i),'%.0f'),'mm/s'])
+    text(ktab.TPV(i)+ktab.start(i)+50,ktab.APV(i),['APV',num2str(i),': ',num2str(ktab.APV(i),'%.0f'),'mm/s'])
     
     % display movement time
-    plot(ktab.start(i),ktab.APV(i)*1.2,'k*'),plot(ktab.start(i)+ktab.MT(i),ktab.APV(i)*1.2,'k*');
-    line([ktab.start(i),ktab.start(i)+ktab.MT(i)],[ktab.APV(i)*1.2,ktab.APV(i)*1.2]);
-    text(ktab.start(i)+ktab.TPV(i),ktab.APV(i)*1.2+50,['MT: ',num2str(ktab.MT(i)),'ms'],'HorizontalAlignment','center','Color','b');
+    plot(ktab.start(i),ktab.APV(i)*1.1,'k*'),plot(ktab.start(i)+ktab.MT(i),ktab.APV(i)*1.1,'k*');
+    line([ktab.start(i),ktab.start(i)+ktab.MT(i)],[ktab.APV(i)*1.1,ktab.APV(i)*1.1]);
+    text(ktab.start(i)+ktab.MT(i)/2,ktab.APV(i)*1.1+25,['MT',num2str(i),': ',num2str(ktab.MT(i)),'ms'],'HorizontalAlignment','center','Color','b');
 end
 
     figure('Position',[1 scrsz(4)*1/4 scrsz(3)/2 scrsz(4)/2],'Color',[1 1 1])
