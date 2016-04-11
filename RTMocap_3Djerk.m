@@ -2,7 +2,7 @@
 % This function will help you to compute instantaneous jerk as well as
 % popular measures of jerk.
 % 
-% Usage : [jerk,rmsqj,dimlj] = RTMocap_3Djerk(DATA,Fs)
+% Usage : [jerk,msqj,dlj] = RTMocap_3Djerk(DATA,Fs)
 % 
 %       DATA is N-by-3 array of recorded data
 %       Fs is the sampling frequency
@@ -35,7 +35,7 @@
 %   This value has been found as a more accurate measure of smoothness
 %
 %   Example
-%	[jerk,msqj,dimlj] = RTMoCap_3Djerk(data,200)
+%	[jerk,msqj,dlj] = RTMoCap_3Djerk(data,200)
 % 
 % Copyright (C) 2016 Daniel Lewkowicz <daniel.lewkowicz@gmail.com>
 % RTMocap Toolbox available at : http://sites.google.com/RTMocap/
