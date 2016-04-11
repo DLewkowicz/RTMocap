@@ -1,9 +1,9 @@
 %% RTMoCap_3Dacc
 % This function will help you to compute instantaneous acceleration 
 % 
-% Usage : ACC = RTMoCap_3Dacc(DATA,Fs)
+% Usage : ACC = RTMocap_3Dacc(DATA,Fs)
 % 
-%       DATA is an array of recorded data.
+%       DATA is N-by-3 array of recorded data
 %       Fs is the sampling frequency
 %       ACC is a N-by-1 vector.
 % 
@@ -11,10 +11,10 @@
 %       exact same amount of time (i.e. interpolated data), 
 %       the instantaneous acceleration is simply given by: 
 % 
-%           a = sqrt((d(dx/dT)/dT)^2 + (d(dy/dT)/dT)^2 + (d(dz/dT)/dT)^2)
+%           a = sqrt((d²x/d²T)^2 + (d²y/d²T)^2 + (d²z/d²T)^2)
 % 
 %   Example
-%	ACC = RTMoCap_3Dvel(data(:,:,1),200)
+%	ACC = RTMocap_3Dacc(data,200)
 % 
 % Copyright (C) 2014 Daniel Lewkowicz <daniel.lewkowicz@gmail.com>
 % RTMocap Toolbox available at : http://sites.google.com/RTMocap/
@@ -34,6 +34,7 @@
 
 % History:
 % version 1.0 - Daniel Lewkowicz - 08-2014
+% version 1.1 - D.L. minor corrections in comments - 04-2016
 
 function acc = RTMocap_3Dacc(A,Fs)
 

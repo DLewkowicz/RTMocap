@@ -69,11 +69,11 @@ for j=1:size(data,3)
             % perform spline interpolation
             data_i(:,:,j)=interp1(num_frame,data(:,:,j),(1:nb_samples)','spline');
         end
-end 
+end
 
 % Enable warnings for NaN values before leaving
 warning('on','MATLAB:chckxy:IgnoreNaN');
 warning('on','MATLAB:interp1:NaNinY');
-warning('on','MATLAB:interp1:NaNstrip'); 
+warning('on','MATLAB:interp1:NaNstrip');
 
 end

@@ -10,8 +10,8 @@
 %       Principle: Assuming that each measurement is seaparated by the 
 %       exact same amount of time (i.e. interpolated data), 
 %       the instantaneous velocity is simply given by: 
-%           V = dS / dT 
-%       S being the length of the path travelled until time T
+%           V = dL / dT 
+%       L being the length of the path travelled until time T
 % 
 %   Example
 %	V = RTMoCap_3Dvel(data(:,:,1),200)
